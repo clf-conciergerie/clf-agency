@@ -1,22 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
   const cards = document.querySelectorAll('.card');
-  let lastTouchTime = 0;
+  let lastClickTime = 0;
 
   cards.forEach(card => {
     const header = card.querySelector('.card-header');
 
     if (header) {
-      header.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        lastTouchTime = Date.now();
-        toggleCard(card);
-      });
-
+      // Click handler only - no touch behavior
       header.addEventListener('click', function(e) {
-        if (Date.now() - lastTouchTime < 500) {
-          return;
-        }
         e.preventDefault();
+        lastClickTime = Date.now();
         toggleCard(card);
       });
     }

@@ -141,15 +141,16 @@
     transition: transform 0.22s ease, opacity 0.18s ease, stroke 0.18s ease;
     transform-box: fill-box;
     transform-origin: center;
+    vector-effect: non-scaling-stroke;
   }
-  .nav-burger.open .line1 {
-    transform: translateY(5px) rotate(45deg);
+  .nav-burger.open .line:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
   }
-  .nav-burger.open .line2 {
+  .nav-burger.open .line:nth-child(2) {
     opacity: 0;
   }
-  .nav-burger.open .line3 {
-    transform: translateY(-5px) rotate(-45deg);
+  .nav-burger.open .line:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
   }
 
   .mobile-menu {
@@ -629,6 +630,7 @@
   .carousel-item {
     flex: 0 0 100%;
     scroll-snap-align: start;
+    scroll-snap-stop: always;
     min-width: 100%;
   }
   .carousel-dots {
