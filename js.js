@@ -109,4 +109,65 @@ document.addEventListener('DOMContentLoaded', function() {
     track.addEventListener('scroll', throttle(updateActiveDot, 100));
     updateActiveDot();
   });
+
+  // Video Carousel
+  const videoDots = document.querySelectorAll('.video-dot');
+  const videoItems = document.querySelectorAll('.video-item');
+  let currentVideoIndex = 0;
+  let autoPlayTimer = null;
+
+  function switchToVideo(index) {
+    if (index < 0 || index >= videoItems.length) return;
+
+    // Stop all videos
+    videoItems.forEach(video => {
+      video.pause();
+      video.classList.remove('active');
+    });
+
+    // Stop all dots
+    videoDots.forEach(dot => {
+      dot.classList.remove('active');
+    });
+
+    // Play new video
+    currentVideoIndex = index;
+    videoItems[currentVideoIndex].classList.add('active');
+    videoDots[currentVideoIndex].classList.add('active');
+    const video = videoItems[currentVideoIndex];
+    video.currentTime = 0;
+    video.play().catch(err => console.log('Video autoplay blocked:', err));
+
+    // Clear and reset auto-play timer
+    clearTimeout(autoPlayTimer);
+    autoPlayTimer = setTimeout(() => {
+      switchToVideo((currentVideoIndex + 1) % videoItems.length);
+    }, video.duration * 1000 + 500); // Wait for video to finish + 500ms
+  }
+
+  // Handle video end event (in case autoplay timer fails)
+  videoItems.forEach((video, index) => {
+    video.addEventListener('ended', () => {
+      if (currentVideoIndex === index) {
+        switchToVideo((index + 1) % videoItems.length);
+      }
+    });
+  });
+
+  // Dot click handlers
+  videoDots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      clearTimeout(autoPlayTimer);
+      switchToVideo(index);
+      // Resume auto-play
+      autoPlayTimer = setTimeout(() => {
+        switchToVideo((index + 1) % videoItems.length);
+      }, videoItems[index].duration * 1000 + 500);
+    });
+  });
+
+  // Start with first video
+  if (videoItems.length > 0) {
+    switchToVideo(0);
+  }
 });
